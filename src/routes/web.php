@@ -13,7 +13,10 @@ use App\Http\Controllers\BookController;
 |
 */
 
-Route::get('/', [BookController::class, 'index']);
+Route::get('/', [BookController::class, 'index'])->name('index');
 Route::post('/add', [BookController::class, 'store']);
 Route::delete('/book/{id}', [BookController::class, 'destroy']);
 Route::put('/book/{id}', [BookController::class, 'update']);
+Route::fallback(function () {
+    return redirect()->route('index');
+});

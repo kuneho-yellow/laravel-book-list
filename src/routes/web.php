@@ -16,3 +16,4 @@ use App\Http\Controllers\BookController;
 Route::get('/', [BookController::class, 'index']);
 Route::post('/add', [BookController::class, 'store']);
 Route::delete('/book/{id}', [BookController::class, 'destroy']);
+Route::put('/book/{id}', [BookController::class, 'update']);

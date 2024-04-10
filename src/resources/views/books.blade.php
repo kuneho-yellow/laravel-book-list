@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="css/styles.css">
     <title>Books</title>
 </head>
 <body>
@@ -30,6 +30,7 @@
                 <tr>
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
+                    <th scope="col">Edit</th>
                     <th scope="col">Delete</th>
                 </tr>
             </thead>
@@ -38,6 +39,9 @@
                 <tr>
                     <th>{{ $book->title }}</th>
                     <th>{{ $book->author }}</th>
+                    <th>
+                        <button onclick="onClickEditButton({{ $book->id }}, '{{ $book->title }}', '{{ $book->author }}')" class="editBookBtn">Edit</button>
+                    </th>
                     <th>
                         <form action="/book/{{ $book->id }}" method="post">
                             @csrf
@@ -53,5 +57,8 @@
         <h3>No books in collection</h3>
         @endif
     </div>
+
+    @include('modal.edit-book')
+    <script defer src="{{ asset('js/editBook.js') }}"></script>
 </body>
 </html>

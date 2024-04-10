@@ -1,6 +1,6 @@
 const ids = {
     Modal: "editBookModal",
-    CloseBtn: "editBookCloseBtn",
+    CancelBtn: "editBookCancelBtn",
     Form: "editBookForm",
     Title: "editBookTitle",
     Author: "editBookAuthor"
@@ -22,6 +22,6 @@ function onClickEditButton(id, title, author) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Close button
-    document.getElementById(ids.CloseBtn).onclick = closeDialog;
+    // Cancel button
+    document.getElementById(ids.CancelBtn).onclick = closeDialog;
 });

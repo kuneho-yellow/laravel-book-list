@@ -3,7 +3,8 @@ body {
     color: #1f2937;
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 20px 0;
+    text-align: center;
 }
 
 button {
@@ -21,14 +22,61 @@ button:focus {
     cursor: pointer;
 }
 
-div {
+/* Forms */
+
+form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 95%;
-    max-width: 1000px;
-    margin: 0 auto;
+    align-items: center;
+    gap: 8px;
 }
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    align-self: flex-start;
+    margin-top: 16px;
+}
+
+input {
+    font-size: 16px;
+    align-self: stretch;
+    padding: 8px;
+}
+
+input:read-only {
+    pointer-events: none;
+    border: 1px solid #c0c0c0;
+    background-color: lightgray;
+}
+
+form button {
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Containers */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 24px;
+}
+
+.add-book {
+    background-color: #efefef;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    padding: 20px;
+}
+
+/* Modal Dialog */
 
 .modal {
     display: none;
@@ -44,24 +92,41 @@ div {
 }
 
 .modal-content {
-    background-color: #f9faf8;
-    margin: 20% auto;
+    background-color: #efefef;
+    max-width: 760px;
+    margin: 10% auto;
     padding: 20px;
     border: none;
     width: 80%;
 }
 
-/* Close Button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+/* Table */
+
+table, th, td {
+    border: gray 1px solid;
+    padding: 8px;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+table {
+    border-collapse: collapse;
+    width: 100%;
+    word-break: break-word;
+}
+
+thead tr {
+    background-color: #efefef;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9faf8;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #efefef;
+}
+
+td button {
+    width: 32px;
+    height: 32px;
+    padding: 4px 0 0 0;
 }

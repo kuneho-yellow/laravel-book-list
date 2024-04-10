@@ -1,7 +1,6 @@
 <div id="editBookModal" class="modal">
-    <!-- Modal content -->
     <div class="modal-content">
-        <h2>Edit Book</h2>
+        <h2>Edit book</h2>
         <form id="editBookForm" action="/" method="post">
             @csrf
             @method('PUT')
@@ -9,8 +8,9 @@
             <input type="text" id="editBookTitle" name="title" readonly="readonly">
             <label for="author">Author:</label>
             <input type="text" id="editBookAuthor" name="author">
+            <p></p>
             <button type="submit">Save</button>
-            <button id="editBookCloseBtn" type="button">Cancel</button>
+            <button id="editBookCancelBtn" type="button">Cancel</button>
         </form>
     </div>
 </div>

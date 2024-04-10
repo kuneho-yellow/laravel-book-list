@@ -33,8 +33,9 @@
 
             <!-- Search Bar -->
             <div class="search-book">
-                <form action="/" class="single-line" method="get">
+                <form action="/" class="single-line" method="post">
                     @csrf
+                    @method('GET')
                     <input type="text" id="search" name="search" maxlength="255" value="{{ $searchString }}" placeholder="Search...">
                     <button type="submit" class="search-btn">
                         <span class="material-symbols-outlined">search</span>

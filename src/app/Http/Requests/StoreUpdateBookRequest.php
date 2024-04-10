@@ -33,11 +33,13 @@ class StoreUpdateBookRequest extends FormRequest
             "title" => [
                 "required",
                 "min:{$minTitle}",
-                "max:{$maxTitle}"],
+                "max:{$maxTitle}",
+            ],
             "author" => [
                 "required",
                 "min:{$minAuthor}",
-                "max:{$maxAuthor}"],
-            ];
+                "max:{$maxAuthor}",
+            ],
+        ];
     }
 }

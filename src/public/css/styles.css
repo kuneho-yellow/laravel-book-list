@@ -32,6 +32,12 @@ form {
     gap: 8px;
 }
 
+form.single-line {
+    flex-direction: row;
+    margin: 0 0 16px 0;
+    padding: 0;
+}
+
 label {
     font-size: 16px;
     font-weight: bold;
@@ -45,6 +51,10 @@ input {
     margin-bottom: 16px;
 }
 
+form.single-line input {
+    margin-bottom: 0px;
+}
+
 input:read-only {
     pointer-events: none;
     border: 1px solid #c0c0c0;
@@ -56,6 +66,12 @@ input:read-only {
     flex-wrap: wrap;
     align-self: flex-end;
     gap: 8px;
+}
+
+.search-btn {
+    width: 40px;
+    height: 40px;
+    padding: 4px 0 0 0;
 }
 
 @media (max-width: 500px) {
@@ -83,6 +99,13 @@ input:read-only {
     flex-direction: column;
     align-self: stretch;
     padding: 20px;
+}
+
+.search-book {
+    display: flex;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Modal Dialog */

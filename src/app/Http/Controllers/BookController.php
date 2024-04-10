@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Book;
 use App\Http\Requests\StoreUpdateBookRequest;
+use App\Http\Requests\QueryBookRequest;
 
 class BookController extends Controller
 {
@@ -14,15 +15,45 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(?QueryBookRequest $request)
     {
-        $books = Book::all();
+        // Retrieve the validated input data
+        $validated = $request->validated();
+
+        $query = Book::query();
+    
+        // Additional query validations
+        $searchString = $validated["search"] ?? "";
+        $sortBy = $validated["sortBy"] ?? "none";
+        if ($sortBy !== "title" && $sortBy !== "author") {
+            $sortBy = "none";
+        }
+        $isDescending =  $validated["isDescending"] ?? false;
+
+        // Find and sort book entries according to the query
+        $query = Book::query();
+
+        if (!empty($searchString)) {
+            $query->where("title", "LIKE", "%{$searchString}%")
+                ->orWhere("author", "LIKE", "%{$searchString}%");
+        }
+
+        if ($sortBy != "none") {
+            $sortOrder = $isDescending ? "desc" : "asc";
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        $books = $query->get();
+
         return view("books", [
             "books" => $books,
             "minTitleLength" => Book::MIN_TITLE_LENGTH,
             "maxTitleLength" => Book::MAX_TITLE_LENGTH,
             "minAuthorLength" => Book::MIN_AUTHOR_LENGTH,
             "maxAuthorLength" => Book::MAX_AUTHOR_LENGTH,
+            "searchString" => $searchString,
+            "sortBy" => $sortBy,
+            "isDescending" => $isDescending,
         ]);
     }
 

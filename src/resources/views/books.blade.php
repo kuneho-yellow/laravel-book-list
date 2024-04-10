@@ -13,6 +13,7 @@
 
         <h1>Book Collection</h1>
 
+        <!-- Add Book -->
         <section class="add-book">
             <h2>Add a book</h2>
             <form action="/add" method="post">
@@ -29,6 +30,19 @@
 
         <section>
             <h2>Available books</h2>
+
+            <!-- Search Bar -->
+            <div class="search-book">
+                <form action="/" class="single-line" method="get">
+                    @csrf
+                    <input type="text" id="search" name="search" maxlength="255" value="{{ $searchString }}" placeholder="Search...">
+                    <button type="submit" class="search-btn">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Book Table -->
             @if (isset($books) && count($books) > 0)
             <table>
                 <thead>

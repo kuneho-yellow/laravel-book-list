@@ -39,7 +39,11 @@
                     <th>{{ $book->title }}</th>
                     <th>{{ $book->author }}</th>
                     <th>
-                        <a href="/delete/{{ $book->id }}">Delete</a>
+                        <form action="/book/{{ $book->id }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Delete</button>
+                        </form>
                     </th>
                 </tr>
                 @endforeach

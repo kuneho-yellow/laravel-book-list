@@ -18,11 +18,12 @@
             <form action="/add" method="post">
                 @csrf
                 <label for="title">Title *</label>
-                <input type="text" id="title" name="title">
+                <input type="text" id="title" name="title" minlength="{{ $minTitleLength }}" maxlength="{{ $maxTitleLength }}" required>
                 <label for="author">Author *</label>
-                <input type="text" id="author" name="author">
-                <p>* Required field</p>
-                <button class="form-btn" type="Submit">Add</button>
+                <input type="text" id="author" name="author" minlength="{{ $minAuthorLength }}" maxlength="{{ $maxAuthorLength }}" required>
+                <div class="form-btns">
+                    <button type="Submit">Add</button>
+                </div>
             </form>
         </section>
 
@@ -44,7 +45,7 @@
                         <td>{{ $book->title }}</th>
                         <td>{{ $book->author }}</th>
                         <td>
-                            <button onclick="onClickEditButton({{ $book->id }}, '{{ $book->title }}', '{{ $book->author }}')" class="editBookBtn">
+                            <button onclick="onClickEditButton({{ $book }})" class="editBookBtn">
                                 <span class="material-symbols-outlined">edit</span>
                             </button>
                         </td>

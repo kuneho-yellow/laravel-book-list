@@ -14,10 +14,10 @@ function closeDialog() {
     document.getElementById(ids.Modal).style.display = "none";
 }
 
-function onClickEditButton(id, title, author) {
-    document.getElementById(ids.Form).action = "/book/" + id;
-    document.getElementById(ids.Title).value = title;
-    document.getElementById(ids.Author).value = author;
+function onClickEditButton(book) {
+    document.getElementById(ids.Form).action = "/book/" + book.id;
+    document.getElementById(ids.Title).value = book.title;
+    document.getElementById(ids.Author).value = book.author;
     showDialog();
 }
 

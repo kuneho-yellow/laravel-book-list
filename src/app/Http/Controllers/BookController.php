@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use App\Book;
+use App\Http\Requests\StoreUpdateBookRequest;
 
 class BookController extends Controller
 {
@@ -15,8 +17,12 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::all();
-        return view('books', [
-            'books' => $books,
+        return view("books", [
+            "books" => $books,
+            "minTitleLength" => Book::MIN_TITLE_LENGTH,
+            "maxTitleLength" => Book::MAX_TITLE_LENGTH,
+            "minAuthorLength" => Book::MIN_AUTHOR_LENGTH,
+            "maxAuthorLength" => Book::MAX_AUTHOR_LENGTH,
         ]);
     }
 
@@ -33,16 +39,21 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\StoreUpdateBookRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreUpdateBookRequest $request) : RedirectResponse
     {
+        // Retrieve the validated input data
+        $validated = $request->validated();
+
+        // Create and store the new book entry
         $book = new Book;
-        $book->title = $request->title;
-        $book->author = $request->author;
+        $book->title = $validated["title"];
+        $book->author = $validated["author"];
         $book->save();
-        return redirect()->back();
+
+        return redirect("/");
     }
 
     /**
@@ -70,17 +81,22 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreUpdateBookRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(StoreUpdateBookRequest $request, $id) : RedirectResponse
     {
+        // Retrieve the validated input data
+        $validated = $request->validated();
+
+        // Find and update the book entry
         $book = Book::find($id);
-        // $book->title = $request->title; // Title is readonly
-        $book->author = $request->author;
+        // $book->title = $validated["title"]; // Title is readonly
+        $book->author = $validated["author"];
         $book->save();
-        return redirect()->back();
+
+        return redirect("/");
     }
 
     /**

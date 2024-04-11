@@ -15,7 +15,7 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(?QueryBookRequest $request)
+    public function index(QueryBookRequest $request)
     {
         // Retrieve the validated input data
         $validated = $request->validated();

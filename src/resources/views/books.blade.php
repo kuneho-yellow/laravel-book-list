@@ -48,8 +48,36 @@
             <table>
                 <thead>
                     <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Author</th>
+                        <th scope="col">
+                            @if ($sortBy == "title" && !$isDescending)
+                            <a href="/?search={{ $searchString }}&sortBy=title&isDescending=1">
+                                Title <span class="material-symbols-outlined">arrow_downward</span>
+                            </a>
+                            @elseif ($sortBy == "title" && $isDescending)
+                            <a href="/?search={{ $searchString }}&sortBy=none">
+                                Title <span class="material-symbols-outlined">arrow_upward</span>
+                            </a>
+                            @else
+                            <a href="/?search={{ $searchString }}&sortBy=title&isDescending=0">
+                                Title <span class="material-symbols-outlined">sort_by_alpha</span>
+                            </a>
+                            @endif
+                        </th>
+                        <th scope="col">
+                            @if ($sortBy == "author" && !$isDescending)
+                            <a href="/?search={{ $searchString }}&sortBy=author&isDescending=1">
+                                Author <span class="material-symbols-outlined">arrow_downward</span>
+                            </a>
+                            @elseif ($sortBy == "author" && $isDescending)
+                            <a href="/?search={{ $searchString }}&sortBy=none">
+                                Author <span class="material-symbols-outlined">arrow_upward</span>
+                            </a>
+                            @else
+                            <a href="/?search={{ $searchString }}&sortBy=author&isDescending=0">
+                                Author <span class="material-symbols-outlined">sort_by_alpha</span>
+                            </a>
+                            @endif
+                        </th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </tr>

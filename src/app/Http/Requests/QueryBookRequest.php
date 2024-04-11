@@ -30,9 +30,9 @@ class QueryBookRequest extends FormRequest
             "sortBy" => [
                 "nullable",
             ],
-            "isSortAscending" => [
+            "isDescending" => [
                 "nullable",
-                "boolean",
+                "boolean"
             ],
         ];
     }

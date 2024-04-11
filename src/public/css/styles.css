@@ -162,3 +162,18 @@ td button {
     height: 32px;
     padding: 4px 0 0 0;
 }
+
+.sort-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+}
+
+a, a:hover, a:visited, a:active {
+    color: #1f2937;
+    text-decoration: none;
+}
+
+a span.material-symbols-outlined {
+    font-size: 16px;
+}

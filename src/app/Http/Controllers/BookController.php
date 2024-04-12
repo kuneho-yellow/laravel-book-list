@@ -15,22 +15,42 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(QueryBookRequest $request)
+    public function index()
+    {
+        $searchString = session("searchString", "");
+        $sortBy = session("sortBy", "none");
+        $sortOrder = session("sortOrder", "asc");
+        $books = session("books", Book::all());
+
+        session()->forget("searchString");
+        session()->forget("sortBy");
+        session()->forget("sortOrder");
+        session()->forget("books");
+
+        return view("books", compact(
+            "books",
+            "searchString",
+            "sortBy",
+            "sortOrder"));
+    }
+
+    /**
+     * Queries the resource.
+     *
+     * @param  \App\Http\Requests\QueryBookRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function query(QueryBookRequest $request)
     {
         // Retrieve the validated input data
         $validated = $request->validated();
-
-        $query = Book::query();
     
-        // Additional query validations
+        // Use default values for any missing query parameters
         $searchString = $validated["search"] ?? "";
         $sortBy = $validated["sortBy"] ?? "none";
-        if ($sortBy !== "title" && $sortBy !== "author") {
-            $sortBy = "none";
-        }
-        $isDescending =  $validated["isDescending"] ?? false;
+        $sortOrder =  $validated["sortOrder"] ?? "asc";
 
-        // Find and sort book entries according to the query
+        // Start a new query
         $query = Book::query();
 
         if (!empty($searchString)) {
@@ -39,22 +59,18 @@ class BookController extends Controller
         }
 
         if ($sortBy != "none") {
-            $sortOrder = $isDescending ? "desc" : "asc";
             $query->orderBy($sortBy, $sortOrder);
         }
 
         $books = $query->get();
 
-        return view("books", [
-            "books" => $books,
-            "minTitleLength" => Book::MIN_TITLE_LENGTH,
-            "maxTitleLength" => Book::MAX_TITLE_LENGTH,
-            "minAuthorLength" => Book::MIN_AUTHOR_LENGTH,
-            "maxAuthorLength" => Book::MAX_AUTHOR_LENGTH,
-            "searchString" => $searchString,
-            "sortBy" => $sortBy,
-            "isDescending" => $isDescending,
-        ]);
+        // Put query parameters and results in session
+        session(["searchString" => $searchString]);
+        session(["sortBy" => $sortBy]);
+        session(["sortOrder" => $sortOrder]);
+        session(["books" => $books]);
+
+        return redirect("/");
     }
 
     /**
@@ -74,7 +90,24 @@ class BookController extends Controller
         $book->author = $validated["author"];
         $book->save();
 
-        return redirect("/");
+        $searchString = $validated["search"];
+        $sortBy = $validated["sortBy"];
+        $sortOrder = $validated["sortOrder"];
+
+        // If the new book does not contain the search string,
+        // clear the search filter
+        if (!empty($searchString)) {
+            $search = mb_strtolower($searchString);
+            $title = mb_strtolower($book->title);
+            $author = mb_strtolower($book->author);
+            if (strpos($title, $search) === false &&
+                strpos($author, $search) === false) {
+                    $searchString = "";
+            }
+        }
+
+        // Redo table query
+        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
     }
 
     /**
@@ -95,19 +128,47 @@ class BookController extends Controller
         $book->author = $validated["author"];
         $book->save();
 
-        return redirect("/");
+        // Redo table query
+        $searchString = $validated["search"];
+        $sortBy = $validated["sortBy"];
+        $sortOrder = $validated["sortOrder"];
+        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \App\Http\Requests\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        // Find and delete the book entry
         $book = Book::findOrFail($id);
         $book->delete();
-        return redirect()->back();
+
+        // Redo table query
+        $searchString = $request->input("search");
+        $sortBy = $request->input("sortBy");
+        $sortOrder = $request->input("sortOrder");
+        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
+    }
+
+    /**
+     * Export a listing of the resource.
+     *
+     * @param  \App\Http\Requests\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function export(Request $request)
+    {
+        // TODO
+
+        // Redo table query
+        $searchString = $request->input("search");
+        $sortBy = $request->input("sortBy");
+        $sortOrder = $request->input("sortOrder");
+        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
     }
 }

@@ -14,9 +14,11 @@ use App\Http\Controllers\BookController;
 */
 
 Route::get('/', [BookController::class, 'index'])->name('index');
+Route::get('/books', [BookController::class, 'query']);
 Route::post('/add', [BookController::class, 'store']);
 Route::delete('/book/{id}', [BookController::class, 'destroy']);
 Route::put('/book/{id}', [BookController::class, 'update']);
+Route::get('/export', [BookController::class, 'export']);
 Route::fallback(function () {
     return redirect()->route('index');
 });

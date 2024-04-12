@@ -170,6 +170,11 @@ class BookEditTest extends TestCase
 
     private function sendPutRequest($bookDataWithId, $expectedHttpCode = 302)
     {
+        // Add other items needed in the request
+        $bookDataWithId["search"] = null;
+        $bookDataWithId["sortBy"] = null;
+        $bookDataWithId["sortOrder"] = null;
+
         // Disable CSRF token verification
         // Note: This is supposed to be disabled automatically by Laravel
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);

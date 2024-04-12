@@ -19,9 +19,17 @@
             <form action="/add" method="post">
                 @csrf
                 <label for="title">Title *</label>
-                <input type="text" id="title" name="title" minlength="{{ $minTitleLength }}" maxlength="{{ $maxTitleLength }}" required>
+                <input type="text" id="title" name="title"
+                    minlength="{{ App\Book::MIN_TITLE_LENGTH }}"
+                    maxlength="{{ App\Book::MAX_TITLE_LENGTH }}" required>
                 <label for="author">Author *</label>
-                <input type="text" id="author" name="author" minlength="{{ $minAuthorLength }}" maxlength="{{ $maxAuthorLength }}" required>
+                <input type="text" id="author" name="author"
+                    minlength="{{ App\Book::MIN_AUTHOR_LENGTH }}"
+                    maxlength="{{ App\Book::MAX_AUTHOR_LENGTH }}" required>
+                <!-- Table filter and sort data -->
+                <input type="hidden" name="search" value="{{ $searchString }}">
+                <input type="hidden" name="sortBy" value="{{ $sortBy }}">
+                <input type="hidden" name="sortOrder" value="{{ $sortOrder }}">
                 <div class="form-btns">
                     <button type="Submit">Add</button>
                 </div>
@@ -32,16 +40,23 @@
             <h2>Available books</h2>
 
             <!-- Search Bar -->
-            <div class="search-book">
-                <form action="/" class="single-line" method="post">
+            @if ((isset($books) && count($books) > 0) || $searchString)
+            <div class="div-spacer">
+                <form action="/books" class="single-line" method="post">
                     @csrf
                     @method('GET')
                     <input type="text" id="search" name="search" maxlength="255" value="{{ $searchString }}" placeholder="Search...">
+                    
+                    <!-- Table sort data -->
+                    <input type="hidden" name="sortBy" value="{{ $sortBy }}">
+                    <input type="hidden" name="sortOrder" value="{{ $sortOrder }}">
+                    
                     <button type="submit" class="search-btn">
                         <span class="material-symbols-outlined">search</span>
                     </button>
                 </form>
             </div>
+            @endif
 
             <!-- Book Table -->
             @if (isset($books) && count($books) > 0)
@@ -49,31 +64,31 @@
                 <thead>
                     <tr>
                         <th scope="col">
-                            @if ($sortBy == "title" && !$isDescending)
-                            <a href="/?search={{ $searchString }}&sortBy=title&isDescending=1">
+                            @if ($sortBy == "title" && $sortOrder != "desc")
+                            <a href="/books?search={{ $searchString }}&sortBy=title&sortOrder=desc">
                                 Title <span class="material-symbols-outlined">arrow_downward</span>
                             </a>
-                            @elseif ($sortBy == "title" && $isDescending)
-                            <a href="/?search={{ $searchString }}&sortBy=none">
+                            @elseif ($sortBy == "title" && $sortOrder == "desc")
+                            <a href="/books?search={{ $searchString }}&sortBy=none">
                                 Title <span class="material-symbols-outlined">arrow_upward</span>
                             </a>
                             @else
-                            <a href="/?search={{ $searchString }}&sortBy=title&isDescending=0">
+                            <a href="/books?search={{ $searchString }}&sortBy=title&sortOrder=asc">
                                 Title <span class="material-symbols-outlined">sort_by_alpha</span>
                             </a>
                             @endif
                         </th>
                         <th scope="col">
-                            @if ($sortBy == "author" && !$isDescending)
-                            <a href="/?search={{ $searchString }}&sortBy=author&isDescending=1">
+                            @if ($sortBy == "author" && $sortOrder != "desc")
+                            <a href="/books?search={{ $searchString }}&sortBy=author&sortOrder=desc">
                                 Author <span class="material-symbols-outlined">arrow_downward</span>
                             </a>
-                            @elseif ($sortBy == "author" && $isDescending)
-                            <a href="/?search={{ $searchString }}&sortBy=none">
+                            @elseif ($sortBy == "author" && $sortOrder == "desc")
+                            <a href="/books?search={{ $searchString }}&sortBy=none">
                                 Author <span class="material-symbols-outlined">arrow_upward</span>
                             </a>
                             @else
-                            <a href="/?search={{ $searchString }}&sortBy=author&isDescending=0">
+                            <a href="/books?search={{ $searchString }}&sortBy=author&sortOrder=asc">
                                 Author <span class="material-symbols-outlined">sort_by_alpha</span>
                             </a>
                             @endif
@@ -96,6 +111,10 @@
                             <form action="/book/{{ $book->id }}" method="post">
                                 @csrf
                                 @method('DELETE')
+                                <!-- Table filter and sort data -->
+                                <input type="hidden" name="search" value="{{ $searchString }}">
+                                <input type="hidden" name="sortBy" value="{{ $sortBy }}">
+                                <input type="hidden" name="sortOrder" value="{{ $sortOrder }}">
                                 <button type="submit">
                                     <span class="material-symbols-outlined">delete</span>
                                 </button>
@@ -105,6 +124,14 @@
                     @endforeach
                 </tbody>
             </table>
+            
+            <!-- Export -->
+            <div class="div-spacer">
+                <button onclick="onClickExportButton()">Export Table Data</button>
+            </div>
+
+            @elseif ($searchString)
+            <h3>No matching books found</h3>
             @else
             <h3>No books in collection</h3>
             @endif
@@ -114,5 +141,9 @@
     <!-- Edit Book Modal Dialog -->
     @include('modal.edit-book')
     <script defer src="{{ asset('js/editBook.js') }}"></script>
+
+    <!-- Export Modal Dialog -->
+    @include('modal.export')
+    <script defer src="{{ asset('js/export.js') }}"></script>
 </body>
 </html>

@@ -21,7 +21,7 @@ User are allowed to do the following:
 - [Docker](https://docs.docker.com/install)
 - [Docker Compose](https://docs.docker.com/compose/install)
 
-## Local development setup with Docker
+## Local setup with Docker
 1. Clone the repository.
 1. Start the containers by running `docker-compose up -d` in the project root.
 1. Install the composer packages by running `docker-compose exec laravel composer install`.

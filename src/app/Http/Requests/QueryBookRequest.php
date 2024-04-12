@@ -29,10 +29,11 @@ class QueryBookRequest extends FormRequest
             ],
             "sortBy" => [
                 "nullable",
+                "in:none,title,author"
             ],
-            "isDescending" => [
+            "sortOrder" => [
                 "nullable",
-                "boolean"
+                "in:asc,desc"
             ],
         ];
     }

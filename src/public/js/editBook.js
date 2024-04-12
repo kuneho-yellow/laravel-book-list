@@ -1,4 +1,4 @@
-const ids = {
+const editBookIds = {
     Modal: "editBookModal",
     CancelBtn: "editBookCancelBtn",
     Form: "editBookForm",
@@ -7,21 +7,21 @@ const ids = {
 };
 
 function showDialog() {
-    document.getElementById(ids.Modal).style.display = "block";
+    document.getElementById(editBookIds.Modal).style.display = "block";
 }
 
 function closeDialog() {
-    document.getElementById(ids.Modal).style.display = "none";
+    document.getElementById(editBookIds.Modal).style.display = "none";
 }
 
 function onClickEditButton(book) {
-    document.getElementById(ids.Form).action = "/book/" + book.id;
-    document.getElementById(ids.Title).value = book.title;
-    document.getElementById(ids.Author).value = book.author;
+    document.getElementById(editBookIds.Form).action = "/book/" + book.id;
+    document.getElementById(editBookIds.Title).value = book.title;
+    document.getElementById(editBookIds.Author).value = book.author;
     showDialog();
 }
 
 document.addEventListener("DOMContentLoaded", function() {
     // Cancel button
-    document.getElementById(ids.CancelBtn).onclick = closeDialog;
+    document.getElementById(editBookIds.CancelBtn).onclick = closeDialog;
 });

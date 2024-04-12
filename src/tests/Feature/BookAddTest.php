@@ -193,6 +193,11 @@ class BookAddTest extends TestCase
 
     private function sendPostRequest($bookData)
     {
+        // Add other items needed in the request
+        $bookData["search"] = null;
+        $bookData["sortBy"] = null;
+        $bookData["sortOrder"] = null;
+
         // Disable CSRF token verification
         // Note: This is supposed to be disabled automatically by Laravel
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);

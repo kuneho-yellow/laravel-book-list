@@ -40,6 +40,17 @@ class StoreUpdateBookRequest extends FormRequest
                 "min:{$minAuthor}",
                 "max:{$maxAuthor}",
             ],
+            "search" => [
+                "nullable",
+            ],
+            "sortBy" => [
+                "nullable",
+                "in:none,title,author"
+            ],
+            "sortOrder" => [
+                "nullable",
+                "in:asc,desc"
+            ],
         ];
     }
 }

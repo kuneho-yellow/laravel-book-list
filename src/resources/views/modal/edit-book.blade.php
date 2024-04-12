@@ -6,8 +6,16 @@
             @method('PUT')
             <label for="title">Title</label>
             <input type="text" id="editBookTitle" name="title" readonly="readonly">
-            <label for="author">Author</label>
-            <input type="text" id="editBookAuthor" name="author" minlength="{{ $minAuthorLength }}" maxlength="{{ $maxAuthorLength }}" required>
+            <label for="author">Author *</label>
+            <input type="text" id="editBookAuthor" name="author"
+                minlength="{{ App\Book::MIN_AUTHOR_LENGTH }}"
+                maxlength="{{ App\Book::MAX_AUTHOR_LENGTH }}" required>
+            
+            <!-- Table filter and sort data -->
+            <input type="hidden" name="search" value="{{ $searchString }}">
+            <input type="hidden" name="sortBy" value="{{ $sortBy }}">
+            <input type="hidden" name="sortOrder" value="{{ $sortOrder }}">
+            
             <div class="form-btns">
                 <button id="editBookCancelBtn" type="button">Cancel</button>
                 <button type="submit">Save</button>

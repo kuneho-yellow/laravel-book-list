@@ -34,7 +34,7 @@ form {
 
 form.single-line {
     flex-direction: row;
-    margin: 0 0 16px 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -74,11 +74,29 @@ input:read-only {
     padding: 4px 0 0 0;
 }
 
+.radio-btn {
+    font-weight: normal;
+}
+
 @media (max-width: 500px) {
     .form-btns {
         align-self: stretch;
         flex-direction: column;
     }
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    border: 1px gray solid;
+    padding: 16px 40px;
+    align-self: stretch;
+}
+
+legend {
+    align-self: flex-start;
+    text-align: left;
+    font-weight: bold;
 }
 
 /* Containers */
@@ -101,11 +119,8 @@ input:read-only {
     padding: 20px;
 }
 
-.search-book {
-    display: flex;
-    padding: 8px 0;
-    justify-content: center;
-    align-items: center;
+.div-spacer {
+    margin: 16px 0;
 }
 
 /* Modal Dialog */
@@ -125,10 +140,16 @@ input:read-only {
 
 .modal-content {
     background-color: #efefef;
-    max-width: 760px;
+    max-width: 500px;
     margin: 10% auto;
     padding: 20px;
     border: none;
+    width: 80%;
+}
+
+#exportModal .modal-content {
+    max-width: 500px;
+    padding: 20px;
     width: 80%;
 }
 
@@ -161,12 +182,6 @@ td button {
     width: 32px;
     height: 32px;
     padding: 4px 0 0 0;
-}
-
-.sort-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
 }
 
 a, a:hover, a:visited, a:active {

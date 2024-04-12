@@ -18,7 +18,7 @@ class BookExportTest extends TestCase
     {
         $this->setupDatabase();
 
-        $response = $this->post(route("export"), [
+        $response = $this->post(route("books.export"), [
             "exportAs" => "csv",
             "exportOption" => "books"
         ]);
@@ -34,7 +34,7 @@ class BookExportTest extends TestCase
     {
         $this->setupDatabase();
 
-        $response = $this->post(route("export"), [
+        $response = $this->post(route("books.export"), [
             "exportAs" => "csv",
             "exportOption" => "titles"
         ]);
@@ -53,7 +53,7 @@ class BookExportTest extends TestCase
     {
         $this->setupDatabase();
 
-        $response = $this->post(route("export"), [
+        $response = $this->post(route("books.export"), [
             "exportAs" => "csv",
             "exportOption" => "authors"
         ]);
@@ -72,7 +72,7 @@ class BookExportTest extends TestCase
     {
         $this->setupDatabase();
 
-        $response = $this->post(route("export"), [
+        $response = $this->post(route("books.export"), [
             "exportAs" => "xml",
             "exportOption" => 'books'
         ]);
@@ -89,7 +89,7 @@ class BookExportTest extends TestCase
     {
         $this->setupDatabase();
 
-        $response = $this->post(route("export"), [
+        $response = $this->post(route("books.export"), [
             "exportAs" => "xml",
             "exportOption" => 'titles'
         ]);
@@ -109,7 +109,7 @@ class BookExportTest extends TestCase
     {
         $this->setupDatabase();
 
-        $response = $this->post(route("export"), [
+        $response = $this->post(route("books.export"), [
             "exportAs" => "xml",
             "exportOption" => 'authors'
         ]);

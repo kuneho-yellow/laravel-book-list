@@ -200,7 +200,9 @@ class BookAddTest extends TestCase
         $this->assertBookAdded($testBook, $bookCount);
 
         // After redirecting, new book must be visible
-        $response = $this->followingRedirects()->from(route("add"))->get(route("index"));
+        $response = $this->followingRedirects()
+            ->from(route("books.add"))
+            ->get(route("index"));
         $response->assertSee($testBook["title"]);
         $response->assertSee($testBook["author"]);
     }
@@ -217,11 +219,13 @@ class BookAddTest extends TestCase
         // Disable CSRF token verification
         // Note: This is supposed to be disabled automatically by Laravel
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-        $response = $this->post(route("add"), $bookData);
+        $response = $this->post(route("books.add"), $bookData);
 
         // Note: Expected status is HTTP_FOUND(302) instead of HTTP_CREATED(201) due to redirect
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from(route("add"))->get(route("index"));
+        $response = $this->followingRedirects()
+            ->from(route("books.add"))
+            ->get(route("index"));
     }
 
     private function sendPostRequestWithSearchString($bookData, $searchString)
@@ -232,7 +236,7 @@ class BookAddTest extends TestCase
         $bookData["sortOrder"] = null;
 
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-        $response = $this->post(route("add"), $bookData);
+        $response = $this->post(route("books.add"), $bookData);
         $response->assertStatus(302);
 
         return $response;

@@ -106,7 +106,8 @@ class BookController extends Controller
         }
 
         // Redo table query
-        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
+        $url = route("books") . "?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}";
+        return redirect($url);
     }
 
     /**
@@ -131,7 +132,8 @@ class BookController extends Controller
         $searchString = $validated["search"];
         $sortBy = $validated["sortBy"];
         $sortOrder = $validated["sortOrder"];
-        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
+        $url = route("books") . "?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}";
+        return redirect($url);
     }
 
     /**
@@ -151,7 +153,8 @@ class BookController extends Controller
         $searchString = $request->input("search");
         $sortBy = $request->input("sortBy");
         $sortOrder = $request->input("sortOrder");
-        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
+        $url = route("books") . "?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}";
+        return redirect($url);
     }
 
     /**

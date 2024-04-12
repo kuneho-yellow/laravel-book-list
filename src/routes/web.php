@@ -15,10 +15,10 @@ use App\Http\Controllers\BookController;
 
 Route::get('/', [BookController::class, 'index'])->name('index');
 Route::get('/books', [BookController::class, 'query'])->name('books');
-Route::post('/add', [BookController::class, 'store'])->name('add');
-Route::delete('/book/{id}', [BookController::class, 'destroy'])->name('delete');
-Route::put('/book/{id}', [BookController::class, 'update'])->name('edit');
-Route::post('/export', [BookController::class, 'export'])->name('export');
+Route::post('/add', [BookController::class, 'store'])->name('books.add');
+Route::delete('/book/{id}', [BookController::class, 'destroy'])->name('books.delete');
+Route::put('/book/{id}', [BookController::class, 'update'])->name('books.edit');
+Route::post('/export', [BookController::class, 'export'])->name('books.export');
 Route::fallback(function () {
     return redirect()->route('index');
 });

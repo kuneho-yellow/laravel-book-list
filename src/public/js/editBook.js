@@ -15,7 +15,7 @@ function closeDialog() {
 }
 
 function onClickEditButton(book) {
-    document.getElementById(editBookIds.Form).action = "/book/" + book.id;
+    document.getElementById(editBookIds.Form).action = "/books/" + book.id;
     document.getElementById(editBookIds.Title).value = book.title;
     document.getElementById(editBookIds.Author).value = book.author;
     showDialog();

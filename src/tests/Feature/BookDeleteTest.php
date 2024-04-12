@@ -55,7 +55,7 @@ class BookDeleteTest extends TestCase
     private function sendDeleteRequest($idToDelete, $expectedHttpCode)
     {
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-        $response = $this->delete(route("delete", ['id' => $idToDelete]));
+        $response = $this->delete(route("books.delete", ['id' => $idToDelete]));
 
         $response->assertStatus($expectedHttpCode);
     }

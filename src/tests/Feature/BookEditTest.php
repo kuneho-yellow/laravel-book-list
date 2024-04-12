@@ -177,7 +177,7 @@ class BookEditTest extends TestCase
         // Disable CSRF token verification
         // Note: This is supposed to be disabled automatically by Laravel
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-        $route = route("edit", ["id" => $bookDataWithId["id"]]);
+        $route = route("books.edit", ["id" => $bookDataWithId["id"]]);
         $response = $this->put($route, $bookDataWithId);
 
         $response->assertStatus($expectedHttpCode);

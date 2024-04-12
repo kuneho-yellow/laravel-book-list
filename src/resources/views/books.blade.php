@@ -17,7 +17,7 @@
         <!-- Add Book -->
         <section class="add-book">
             <h2>Add a book</h2>
-            <form action="{{ route('add') }}" method="post">
+            <form action="{{ route('books.add') }}" method="post">
                 @csrf
                 <label for="title">Title *</label>
                 <input type="text" id="title" name="title"
@@ -43,7 +43,7 @@
             <!-- Search Bar -->
             @if ((isset($books) && count($books) > 0) || $searchString)
             <div class="div-spacer">
-                <form action="/books" class="single-line" method="post">
+                <form action="{{ route('books') }}" class="single-line" method="post">
                     @csrf
                     @method('GET')
                     <input type="text" id="search" name="search" maxlength="255" value="{{ $searchString }}" placeholder="Search...">
@@ -66,30 +66,30 @@
                     <tr>
                         <th scope="col">
                             @if ($sortBy == "title" && $sortOrder != "desc")
-                            <a href="/books?search={{ $searchString }}&sortBy=title&sortOrder=desc">
+                            <a href="{{ route('books') }}?search={{ $searchString }}&sortBy=title&sortOrder=desc">
                                 Title <span class="material-symbols-outlined">arrow_downward</span>
                             </a>
                             @elseif ($sortBy == "title" && $sortOrder == "desc")
-                            <a href="/books?search={{ $searchString }}&sortBy=none">
+                            <a href="{{ route('books') }}?search={{ $searchString }}&sortBy=none">
                                 Title <span class="material-symbols-outlined">arrow_upward</span>
                             </a>
                             @else
-                            <a href="/books?search={{ $searchString }}&sortBy=title&sortOrder=asc">
+                            <a href="{{ route('books') }}?search={{ $searchString }}&sortBy=title&sortOrder=asc">
                                 Title <span class="material-symbols-outlined">sort_by_alpha</span>
                             </a>
                             @endif
                         </th>
                         <th scope="col">
                             @if ($sortBy == "author" && $sortOrder != "desc")
-                            <a href="/books?search={{ $searchString }}&sortBy=author&sortOrder=desc">
+                            <a href="{{ route('books') }}?search={{ $searchString }}&sortBy=author&sortOrder=desc">
                                 Author <span class="material-symbols-outlined">arrow_downward</span>
                             </a>
                             @elseif ($sortBy == "author" && $sortOrder == "desc")
-                            <a href="/books?search={{ $searchString }}&sortBy=none">
+                            <a href="{{ route('books') }}?search={{ $searchString }}&sortBy=none">
                                 Author <span class="material-symbols-outlined">arrow_upward</span>
                             </a>
                             @else
-                            <a href="/books?search={{ $searchString }}&sortBy=author&sortOrder=asc">
+                            <a href="{{ route('books') }}?search={{ $searchString }}&sortBy=author&sortOrder=asc">
                                 Author <span class="material-symbols-outlined">sort_by_alpha</span>
                             </a>
                             @endif
@@ -109,7 +109,7 @@
                             </button>
                         </td>
                         <td>
-                            <form action="{{ route('delete', ['id' => $book->id]) }}" method="post">
+                            <form action="{{ route('books.delete', ['id' => $book->id]) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <!-- Table filter and sort data -->

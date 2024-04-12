@@ -1,7 +1,7 @@
 <div id="editBookModal" class="modal">
     <div class="modal-content">
         <h2>Edit book</h2>
-        <form id="editBookForm" action="{{ route('index') }}" method="post">
+        <form id="editBookForm" action="#" method="post">
             @csrf
             @method('PUT')
             <label for="title">Title</label>

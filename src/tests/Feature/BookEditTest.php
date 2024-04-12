@@ -10,7 +10,6 @@ use App\Book;
 
 class BookEditTest extends TestCase
 {
-    // TODO: Properly set up a database for testing 
     use DatabaseTransactions;   // Prevent changes to the actual database
 
     /****** Tests ******/

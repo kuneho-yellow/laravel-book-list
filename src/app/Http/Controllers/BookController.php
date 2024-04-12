@@ -18,11 +18,14 @@ class BookController extends Controller
      */
     public function index()
     {
+        // Look through session variables if prior book query has been done
+        // TODO: Handle session expiring
+        $books = session("books", Book::all());
         $searchString = session("searchString", "");
         $sortBy = session("sortBy", "none");
         $sortOrder = session("sortOrder", "asc");
-        $books = session("books", Book::all());
 
+        // TODO: Limit number of books returned and displayed at once
         return view("books", compact(
             "books",
             "searchString",
@@ -178,14 +181,9 @@ class BookController extends Controller
      */
     public function exportAsCsv(Request $request)
     {
+        // Export books in session
+        $books = session("books", Book::all());
         $exportOption = $request->input("exportOption");
-
-        if (session()->has("books")) {
-            $books = session("books", Book::all());
-        } else {
-            $books = Book::all();
-            session(["books" => $books]);
-        }
 
         switch ($exportOption) {
             case "titles":
@@ -211,6 +209,7 @@ class BookController extends Controller
 
         }
 
+        // Use helper function for escaping logic
         $csvData = $this->arrayToCsv($data);
 
         return Response::make($csvData, 200, [
@@ -219,31 +218,29 @@ class BookController extends Controller
         ]);
     }
 
-    private function arrayToCsv(array $data) {
-        $output = fopen('php://temp', 'w');
-        foreach ($data as $row) {
-            fputcsv($output, $row);
-        }
-        rewind($output);
-        $csvData = stream_get_contents($output);
-        fclose($output);
-        return $csvData;
-    }
-
-    public function exportAsXml(Request $request)
+    /**
+     * Export a listing of the resource as an xml file.
+     *
+     * @param  \App\Http\Requests\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function exportAsXml(Request $request)
     {
+        // Export books in session
+        $books = session("books", Book::all());
         $exportOption = $request->input("exportOption");
 
-        if (session()->has("books")) {
-            $books = session("books", Book::all());
-        } else {
-            $books = Book::all();
-            session(["books" => $books]);
-        }
-
+        // Build up the xml like this:
+        // <books>
+        //   <book>
+        //     <title>My Book</title>
+        //     <author>The Author</author>
+        //   </book>
+        // ...
+        // </books>
+        $data = new \SimpleXMLElement("<books></books>");
         switch ($exportOption) {
             case "titles":
-                $data = new \SimpleXMLElement("<books></books>");
                 foreach ($books as $book) {
                     $child = $data->addChild("book");
                     $child->addChild("title", htmlspecialchars($book->title));
@@ -251,7 +248,6 @@ class BookController extends Controller
                 break;
 
             case "authors":
-                $data = new \SimpleXMLElement("<books></books>");
                 foreach ($books as $book) {
                     $child = $data->addChild("book");
                     $child->addChild("author", htmlspecialchars($book->author));
@@ -259,7 +255,6 @@ class BookController extends Controller
                 break;
 
             default:
-                $data = new \SimpleXMLElement("<books></books>");
                 foreach ($books as $book) {
                     $child = $data->addChild("book");
                     $child->addChild("title", htmlspecialchars($book->title));
@@ -274,5 +269,16 @@ class BookController extends Controller
             "Content-Type" => "text/xml",
             "Content-Disposition" => "attachment; filename='data.xml'",
         ]);
+    }
+
+    private function arrayToCsv(array $data) {
+        $output = fopen("php://temp", "w");
+        foreach ($data as $row) {
+            fputcsv($output, $row);
+        }
+        rewind($output);
+        $csvData = stream_get_contents($output);
+        fclose($output);
+        return $csvData;
     }
 }

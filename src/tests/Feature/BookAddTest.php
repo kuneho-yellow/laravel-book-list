@@ -10,7 +10,6 @@ use App\Book;
 
 class BookAddTest extends TestCase
 {
-    // TODO: Properly set up a database for testing 
     use DatabaseTransactions;   // Prevent changes to the actual database
 
     /****** Tests ******/
@@ -189,6 +188,23 @@ class BookAddTest extends TestCase
         $this->assertBookNotAdded($testBook, $bookCount);
     }
 
+    public function testAddBookOutsideSearchString()
+    {
+        $testBook = [
+            "title" => "Pride and Prejudice",
+            "author" => "Jane Austen",
+        ];
+        $bookCount = Book::count();
+
+        $response = $this->sendPostRequestWithSearchString($testBook, "Lewis");
+        $this->assertBookAdded($testBook, $bookCount);
+
+        // After redirecting, new book must be visible
+        $response = $this->followingRedirects()->from(route("add"))->get(route("index"));
+        $response->assertSee($testBook["title"]);
+        $response->assertSee($testBook["author"]);
+    }
+
     /****** Helper Functions ******/
 
     private function sendPostRequest($bookData)
@@ -205,6 +221,21 @@ class BookAddTest extends TestCase
 
         // Note: Expected status is HTTP_FOUND(302) instead of HTTP_CREATED(201) due to redirect
         $response->assertStatus(302);
+        $response = $this->followingRedirects()->from(route("add"))->get(route("index"));
+    }
+
+    private function sendPostRequestWithSearchString($bookData, $searchString)
+    {
+        // Add other items needed in the request
+        $bookData["search"] = $searchString;
+        $bookData["sortBy"] = null;
+        $bookData["sortOrder"] = null;
+
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+        $response = $this->post(route("add"), $bookData);
+        $response->assertStatus(302);
+
+        return $response;
     }
 
     private function assertBookAdded($bookData, $initialBookCount)

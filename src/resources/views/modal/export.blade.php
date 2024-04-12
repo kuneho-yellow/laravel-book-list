@@ -7,15 +7,15 @@
             <fieldset>
                 <legend>Include</legend>
                 <label for="exportOption1" class="radio-btn">
-                    <input type="radio" id="exportOption1" name="exportOption" value="both" checked/>
+                    <input type="radio" id="exportOption1" name="exportOption" value="books" checked/>
                     Titles and authors
                 </label>
                 <label for="exportOption2" class="radio-btn">
-                    <input type="radio" id="exportOption2" name="exportOption" value="title"/>
+                    <input type="radio" id="exportOption2" name="exportOption" value="titles"/>
                     Titles only
                 </label>
                 <label for="exportOption3" class="radio-btn">
-                    <input type="radio" id="exportOption3" name="exportOption" value="author"/>
+                    <input type="radio" id="exportOption3" name="exportOption" value="authors"/>
                     Authors only
                 </label>
             </fieldset>

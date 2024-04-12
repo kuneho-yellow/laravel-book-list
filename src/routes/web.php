@@ -18,7 +18,7 @@ Route::get('/books', [BookController::class, 'query'])->name('books');
 Route::post('/add', [BookController::class, 'store'])->name('add');
 Route::delete('/book/{id}', [BookController::class, 'destroy'])->name('delete');
 Route::put('/book/{id}', [BookController::class, 'update'])->name('edit');
-Route::get('/export', [BookController::class, 'export'])->name('export');
+Route::post('/export', [BookController::class, 'export'])->name('export');
 Route::fallback(function () {
     return redirect()->route('index');
 });

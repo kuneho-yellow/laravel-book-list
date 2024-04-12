@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
 use App\Book;
 use App\Http\Requests\StoreUpdateBookRequest;
 use App\Http\Requests\QueryBookRequest;
@@ -21,11 +22,6 @@ class BookController extends Controller
         $sortBy = session("sortBy", "none");
         $sortOrder = session("sortOrder", "asc");
         $books = session("books", Book::all());
-
-        session()->forget("searchString");
-        session()->forget("sortBy");
-        session()->forget("sortOrder");
-        session()->forget("books");
 
         return view("books", compact(
             "books",
@@ -64,7 +60,7 @@ class BookController extends Controller
 
         $books = $query->get();
 
-        // Put query parameters and results in session
+        // Save query parameters and results in session
         session(["searchString" => $searchString]);
         session(["sortBy" => $sortBy]);
         session(["sortOrder" => $sortOrder]);
@@ -163,12 +159,120 @@ class BookController extends Controller
      */
     public function export(Request $request)
     {
-        // TODO
+        $exportAs = $request->input("exportAs");
+        switch ($exportAs) {
+            case "xml":
+                return $this->exportAsXml($request);
 
-        // Redo table query
-        $searchString = $request->input("search");
-        $sortBy = $request->input("sortBy");
-        $sortOrder = $request->input("sortOrder");
-        return redirect("/books?search={$searchString}&sortBy={$sortBy}&sortOrder={$sortOrder}");
+            case "csv":
+                default:
+                return $this->exportAsCsv($request);
+        }
+    }
+
+    /**
+     * Export a listing of the resource as a csv file.
+     *
+     * @param  \App\Http\Requests\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportAsCsv(Request $request)
+    {
+        $exportOption = $request->input("exportOption");
+
+        if (session()->has("books")) {
+            $books = session("books", Book::all());
+        } else {
+            $books = Book::all();
+            session(["books" => $books]);
+        }
+
+        switch ($exportOption) {
+            case "titles":
+                $data[] = ["Title"];
+                foreach ($books as $book) {
+                    $data[] = [$book->title];
+                }
+                break;
+
+            case "authors":
+                $data[] = ["Author"];
+                foreach ($books as $book) {
+                    $data[] = [$book->author];
+                }
+                break;
+
+            default:
+                $data[] = ["Title", "Author"];
+                foreach ($books as $book) {
+                    $data[] = [$book->title, $book->author];
+                }
+                break;
+
+        }
+
+        $csvData = $this->arrayToCsv($data);
+
+        return Response::make($csvData, 200, [
+            "Content-Type" => "text/csv",
+            "Content-Disposition" => "attachment; filename='data.csv'",
+        ]);
+    }
+
+    private function arrayToCsv(array $data) {
+        $output = fopen('php://temp', 'w');
+        foreach ($data as $row) {
+            fputcsv($output, $row);
+        }
+        rewind($output);
+        $csvData = stream_get_contents($output);
+        fclose($output);
+        return $csvData;
+    }
+
+    public function exportAsXml(Request $request)
+    {
+        $exportOption = $request->input("exportOption");
+
+        if (session()->has("books")) {
+            $books = session("books", Book::all());
+        } else {
+            $books = Book::all();
+            session(["books" => $books]);
+        }
+
+        switch ($exportOption) {
+            case "titles":
+                $data = new \SimpleXMLElement("<books></books>");
+                foreach ($books as $book) {
+                    $child = $data->addChild("book");
+                    $child->addChild("title", htmlspecialchars($book->title));
+                }
+                break;
+
+            case "authors":
+                $data = new \SimpleXMLElement("<books></books>");
+                foreach ($books as $book) {
+                    $child = $data->addChild("book");
+                    $child->addChild("author", htmlspecialchars($book->author));
+                }
+                break;
+
+            default:
+                $data = new \SimpleXMLElement("<books></books>");
+                foreach ($books as $book) {
+                    $child = $data->addChild("book");
+                    $child->addChild("title", htmlspecialchars($book->title));
+                    $child->addChild("author", htmlspecialchars($book->author));
+                }
+                break;
+        }
+
+        $xmlData = $data->asXML();
+
+        return Response::make($xmlData, 200, [
+            "Content-Type" => "text/xml",
+            "Content-Disposition" => "attachment; filename='data.xml'",
+        ]);
     }
 }

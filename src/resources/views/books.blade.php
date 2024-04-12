@@ -16,7 +16,7 @@
         <!-- Add Book -->
         <section class="add-book">
             <h2>Add a book</h2>
-            <form action="/add" method="post">
+            <form action="{{ route('add') }}" method="post">
                 @csrf
                 <label for="title">Title *</label>
                 <input type="text" id="title" name="title"
@@ -108,7 +108,7 @@
                             </button>
                         </td>
                         <td>
-                            <form action="/book/{{ $book->id }}" method="post">
+                            <form action="{{ route('delete', ['id' => $book->id]) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <!-- Table filter and sort data -->

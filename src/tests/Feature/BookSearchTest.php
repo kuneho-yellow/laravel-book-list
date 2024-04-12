@@ -23,7 +23,7 @@ class BookSearchTest extends TestCase
         $searchString = "Mark";
         $response = $this->get("/books?search=$searchString");
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from("/books")->get("/");
+        $response = $this->followingRedirects()->from("/books")->get(route("index"));
 
         // Assert books related to search strings are seen
         $response->assertSee("The Adventures of Tom Sawyer");
@@ -41,7 +41,7 @@ class BookSearchTest extends TestCase
         $searchString = "";
         $response = $this->get("/books?search=$searchString");
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from("/books")->get("/");
+        $response = $this->followingRedirects()->from("/books")->get(route("index"));
 
         // Assert all books seen
         $response->assertSee("The Adventures of Tom Sawyer");
@@ -57,7 +57,7 @@ class BookSearchTest extends TestCase
         $searchString = "Mark";
         $response = $this->get("/books?search=$searchString&sortBy=title&sortOrder=asc");
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from("/books")->get("/");
+        $response = $this->followingRedirects()->from("/books")->get(route("index"));
 
         // Assert books related to search strings are seen in ascending titles
         $response->assertSeeInOrder([
@@ -76,7 +76,7 @@ class BookSearchTest extends TestCase
         $searchString = "Mark";
         $response = $this->get("/books?search=$searchString&sortBy=title&sortOrder=desc");
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from("/books")->get("/");
+        $response = $this->followingRedirects()->from("/books")->get(route("index"));
 
         // Assert books related to search strings are seen in descending titles
         $response->assertSeeInOrder([
@@ -95,7 +95,7 @@ class BookSearchTest extends TestCase
         $searchString = "Mark";
         $response = $this->get("/books?search=$searchString&sortBy=author&sortOrder=asc");
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from("/books")->get("/");
+        $response = $this->followingRedirects()->from("/books")->get(route("index"));
 
         // Assert books related to search strings are seen in ascending authors
         $response->assertSeeInOrder([
@@ -114,7 +114,7 @@ class BookSearchTest extends TestCase
         $searchString = "Mark";
         $response = $this->get("/books?search=$searchString&sortBy=author&sortOrder=desc");
         $response->assertStatus(302);
-        $response = $this->followingRedirects()->from("/books")->get("/");
+        $response = $this->followingRedirects()->from("/books")->get(route("index"));
 
         // Assert books related to search strings are seen in descending authors
         $response->assertSeeInOrder([

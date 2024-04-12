@@ -201,7 +201,7 @@ class BookAddTest extends TestCase
         // Disable CSRF token verification
         // Note: This is supposed to be disabled automatically by Laravel
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-        $response = $this->post("/add", $bookData);
+        $response = $this->post(route("add"), $bookData);
 
         // Note: Expected status is HTTP_FOUND(302) instead of HTTP_CREATED(201) due to redirect
         $response->assertStatus(302);

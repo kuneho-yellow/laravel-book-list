@@ -70,7 +70,7 @@ class BookController extends Controller
         session(["sortOrder" => $sortOrder]);
         session(["books" => $books]);
 
-        return redirect("/");
+        return redirect(route("index"));
     }
 
     /**

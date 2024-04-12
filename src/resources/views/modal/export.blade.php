@@ -1,7 +1,7 @@
 <div id="exportModal" class="modal">
     <div class="modal-content">
         <h2>Export data</h2>
-        <form id="exportForm" action="/export" method="post">
+        <form id="exportForm" action="{{ route('export') }}" method="post">
             @csrf
             @method('GET')
             <fieldset>
